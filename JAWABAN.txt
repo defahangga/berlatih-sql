@@ -1,0 +1,126 @@
+1.) MEMBUAT DATABASE
+    syntax :
+    CREATE DATABASE myshop;
+
+
+2.) MEMBUAT TABEL
+    a. Tabel users
+       syntax :
+       CREATE TABLE users (
+       -> id int primary key auto_increment,
+       -> name varchar(255),
+       -> email varchar(255),
+       -> password varchar(255)
+       -> );
+
+    b. Tabel items
+       syntax :
+       CREATE TABLE items (
+       -> id int primary key auto_increment,
+       -> name varchar(255),
+       -> description varchar(255),
+       -> price int,
+       -> stock int,
+       -> category_id int
+       -> );
+
+    c. Tabel categories
+       syntax :
+       CREATE TABLE categories (
+       -> id int primary key auto_increment,
+       -> name varchar(255)
+       -> );
+
+       MENAMBAHKAN FOREIGN KEY DI TABEL ITEMS
+       syntax :
+       ALTER TABLE items
+       -> add foreign key (category_id) references categories(id);
+
+
+
+3.) MEMASUKKAN DATA PADA TABEL
+    a. Tabel users
+       Syntax :
+       INSERT INTO users VALUES
+       -> ('', 'John Doe', 'john@doe.com', 'john123'),
+       -> ('', 'Jane Doe', 'jane@doe.com', 'jenita123');
+
+    b. tabel categories
+       syntax :
+       INSERT INTO categories VALUES
+       -> ('', 'gadget'),
+       -> ('', 'cloth'),
+       -> ('', 'men'),
+       -> ('', 'women'),
+       -> ('', 'branded');
+
+    c. tabel items
+       syntax :
+       INSERT INTO items VALUES
+       -> ('', 'Sumsang b50', 'hape keren dari merek sumsang', 4000000, 100, 1),
+       -> ('', 'Uniklooh', 'baju keren dari brand ternama', 500000, 50, 2),
+       -> ('', 'IMHO Watch', 'jam tangan anak yang jujur banget', 2000000, 10, 1);
+
+
+4.) MENAMPILKAN DATA
+    a. Mengambil data users
+       Menampilkan seluruh data users kecuali password
+       syntax :
+       SELECT id, name, email FROM users;
+       +----+----------+--------------+
+       | id | name     | email        |
+       +----+----------+--------------+
+       |  1 | John Doe | john@doe.com |
+       |  2 | Jane Doe | jane@doe.com |
+       +----+----------+--------------+
+
+    b. Mengambil data items
+       items yang memiliki harga di atas 1000000
+       syntax :
+       SELECT * FROM items WHERE price > 1000000;
+       +----+-------------+-----------------------------------+---------+-------+-------------+
+       | id | name        | description                       | price   | stock | category_id |
+       +----+-------------+-----------------------------------+---------+-------+-------------+
+       |  1 | Sumsang b50 | hape keren dari merek sumsang     | 4000000 |   100 |           1 |
+       |  3 | IMHO Watch  | jam tangan anak yang jujur banget | 2000000 |    10 |           1 |
+       +----+-------------+-----------------------------------+---------+-------+-------------+
+
+       items yang memiliki name serupa atau mirip (like) dengan kata kunci “sang”
+       syntax :
+       SELECT * FROM items WHERE name LIKE '%sang%';
+       +----+-------------+-------------------------------+---------+-------+-------------+
+       | id | name        | description                   | price   | stock | category_id |
+       +----+-------------+-------------------------------+---------+-------+-------------+
+       |  1 | Sumsang b50 | hape keren dari merek sumsang | 4000000 |   100 |           1 |
+       +----+-------------+-------------------------------+---------+-------+-------------+
+
+    c. Menampilkan data items join dengan kategori
+       Menampilkan data items yang dilengkapi dengan data nama kategori di masing-masing items
+       syntax :
+       SELECT it.name, description, price, stock, it.category_id, ct.name as kategori
+       -> FROM items it INNER JOIN categories ct
+       -> ON it.category_id = ct.id;
+       +-------------+-----------------------------------+---------+-------+-------------+----------+
+       | name        | description                       | price   | stock | category_id | kategori |
+       +-------------+-----------------------------------+---------+-------+-------------+----------+
+       | Sumsang b50 | hape keren dari merek sumsang     | 4000000 |   100 |           1 | gadget   |
+       | Uniklooh    | baju keren dari brand ternama     |  500000 |    50 |           2 | cloth    |
+       | IMHO Watch  | jam tangan anak yang jujur banget | 2000000 |    10 |           1 | gadget   |
+       +-------------+-----------------------------------+---------+-------+-------------+----------+
+
+
+5.) MENGUBAH DATA DARI DATABASE
+    Ubahlah data pada table items untuk item dengan nama sumsang harganya (price) menjadi 2500000
+    syntax :
+    UPDATE items SET price = 2500000 WHERE name LIKE 'sumsang%';
+    Query OK, 1 row affected (0.051 sec)
+    Rows matched: 1  Changed: 1  Warnings: 0
+
+    MariaDB [myshop]> select * from items;
+    +----+-------------+-----------------------------------+---------+-------+-------------+
+    | id | name        | description                       | price   | stock | category_id |
+    +----+-------------+-----------------------------------+---------+-------+-------------+
+    |  1 | Sumsang b50 | hape keren dari merek sumsang     | 2500000 |   100 |           1 |
+    |  2 | Uniklooh    | baju keren dari brand ternama     |  500000 |    50 |           2 |
+    |  3 | IMHO Watch  | jam tangan anak yang jujur banget | 2000000 |    10 |           1 |
+    +----+-------------+-----------------------------------+---------+-------+-------------+
