@@ -1,0 +1,5 @@
+JAWABAN NO. 1
+MEMBUAT DATABASE
+
+syntax :
+CREATE DATABASE myshop;
